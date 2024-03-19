@@ -48,6 +48,7 @@ public:
 		Valueable<bool> JumpjetNoWobbles;
 
 		Nullable<WarheadTypeClass*> VeinholeWarhead;
+		Valueable<LandTypeFlags> VeinForbiddenTerrain;
 
 		PhobosFixedString<32u> MissingCameo;
 
@@ -131,7 +132,8 @@ public:
 			, RadHasInvoker { false }
 			, JumpjetCrash { 5.0 }
 			, JumpjetNoWobbles { false }
-			, VeinholeWarhead {}
+			, VeinholeWarhead { }
+			, VeinForbiddenTerrain { LandTypeFlags::Default }
 			, MissingCameo { GameStrings::XXICON_SHP() }
 
 			, PlacementGrid_Translucency { 0 }

@@ -234,10 +234,11 @@ DEFINE_HOOK(0x73D49E, UnitClass_Harvesting_Weeder, 0x7)
 
 	GET(UnitClass*, pUnit, ESI);
 	GET(CellClass*, pCell, EBP);
-	constexpr unsigned char weedOverlayData = 0x30;
+	constexpr unsigned char fullyFlownWeedStart = 0x30; // Weeds starting from this overlay frame are fully grown
+	// constexpr unsigned int weedOverlayIndex = 126;
 
 	bool harvesterCanHarvest = pUnit->Type->Harvester && pCell->LandType == LandType::Tiberium;
-	bool weederCanWeed = pUnit->Type->Weeder && pCell->LandType == LandType::Weeds && pCell->OverlayData >= weedOverlayData;
+	bool weederCanWeed = pUnit->Type->Weeder && pCell->LandType == LandType::Weeds && pCell->OverlayData >= fullyFlownWeedStart;
 
 
 	if ((harvesterCanHarvest || weederCanWeed) && pUnit->GetStoragePercentage() < 1.0)
@@ -360,4 +361,36 @@ DEFINE_HOOK(0x73E9A0, UnitClass_Weeder_StopHarvesting, 0x6)
 	}
 
 	return Skip;
+}
+
+DEFINE_HOOK(0x48547A, CellClass_CanHaveVeins, 0x6)
+{
+	enum
+	{
+		Process = 0x48549E,
+		Skip = 0x485580
+	};
+
+	GET(LandType, landType, EAX);
+
+	if (IsLandTypeInFlags(RulesExt::Global()->VeinForbiddenTerrain, landType))
+		return Skip;
+
+	return Process;
+}
+
+DEFINE_HOOK(0x485543, CellClass_CanHaveVeins2, 0x6)
+{
+	enum
+	{
+		Process = 0x485557,
+		Skip = 0x485580
+	};
+
+	GET(LandType, landType, ECX);
+
+	if (IsLandTypeInFlags(RulesExt::Global()->VeinForbiddenTerrain, landType))
+		return Skip;
+
+	return Process;
 }

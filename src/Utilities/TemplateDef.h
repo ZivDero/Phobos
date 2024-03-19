@@ -595,6 +595,78 @@ namespace detail
 	}
 
 	template <>
+	inline bool read<LandTypeFlags>(LandTypeFlags& value, INI_EX& parser, const char* pSection, const char* pKey)
+	{
+		if (parser.ReadString(pSection, pKey))
+		{
+			auto parsed = LandTypeFlags::None;
+			auto str = parser.value();
+			char* context = nullptr;
+
+			for (auto cur = strtok_s(str, Phobos::readDelims, &context); cur; cur = strtok_s(nullptr, Phobos::readDelims, &context))
+			{
+				if (!_strcmpi(cur, "Clear"))
+				{
+					parsed |= LandTypeFlags::Clear;
+				}
+				else if (!_strcmpi(cur, "Road"))
+				{
+					parsed |= LandTypeFlags::Road;
+				}
+				else if (!_strcmpi(cur, "Water"))
+				{
+					parsed |= LandTypeFlags::Water;
+				}
+				else if (!_strcmpi(cur, "Rock"))
+				{
+					parsed |= LandTypeFlags::Rock;
+				}
+				else if (!_strcmpi(cur, "Wall"))
+				{
+					parsed |= LandTypeFlags::Wall;
+				}
+				else if (!_strcmpi(cur, "Tiberium"))
+				{
+					parsed |= LandTypeFlags::Tiberium;
+				}
+				else if (!_strcmpi(cur, "Beach"))
+				{
+					parsed |= LandTypeFlags::Beach;
+				}
+				else if (!_strcmpi(cur, "Rough"))
+				{
+					parsed |= LandTypeFlags::Rough;
+				}
+				else if (!_strcmpi(cur, "Ice"))
+				{
+					parsed |= LandTypeFlags::Ice;
+				}
+				else if (!_strcmpi(cur, "Railroad"))
+				{
+					parsed |= LandTypeFlags::Railroad;
+				}
+				else if (!_strcmpi(cur, "Tunnel"))
+				{
+					parsed |= LandTypeFlags::Tunnel;
+				}
+				else if (!_strcmpi(cur, "Weeds"))
+				{
+					parsed |= LandTypeFlags::Weeds;
+				}
+				else if (_strcmpi(cur, "None"))
+				{
+					parsed |= LandTypeFlags::None;
+				}
+			}
+
+			value = parsed;
+			return true;
+		}
+
+		return false;
+	}
+
+	template <>
 	inline bool read<SuperWeaponAITargetingMode>(SuperWeaponAITargetingMode &value, INI_EX &parser, const char *pSection, const char *pKey)
 	{
 		if (parser.ReadString(pSection, pKey))
